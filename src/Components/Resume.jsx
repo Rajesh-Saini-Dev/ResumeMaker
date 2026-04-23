@@ -20,6 +20,13 @@ function Resume() {
         responsibility: "",
       },
     ],
+    projects: [
+      {
+        projectName: "",
+        technologies: "",
+        discription: "",
+      },
+    ],
 
     education: [{ college: "", school: "", year: "", university: "" }],
 
@@ -51,6 +58,28 @@ function Resume() {
   const removeExperience = (index) => {
     const newExp = data.experiences.filter((_, i) => i !== index);
     setData({ ...data, experiences: newExp });
+  };
+
+  //----------- PROJECTS -----------
+  const handleProjectChange = (index, e) => {
+    const newExp = [...data.projects];
+    newExp[index][e.target.name] = e.target.value;
+    setData({ ...data, projects: newExp });
+  };
+
+  const addProject = () => {
+    setData({
+      ...data,
+      projects: [
+        ...data.projects,
+        { projectName: "", technologies: "", discription: "" },
+      ],
+    });
+  };
+
+  const removeProject = (index) => {
+    const newExp = data.projects.filter((_, i) => i !== index);
+    setData({ ...data, projects: newExp });
   };
 
   // ---------- EDUCATION ----------
@@ -188,6 +217,48 @@ function Resume() {
           className="bg-green-500 text-white px-3 py-1"
         >
           + Add Experience
+        </button>
+        {/* PROJECT */}
+        <h3 className="mt-5 font-bold">Projects</h3>
+        {data.projects.map((pro, index) => (
+          <div key={index} className="mb-3">
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                name="projectName"
+                value={pro.projectName}
+                onChange={(e) => handleProjectChange(index, e)}
+                placeholder="project Name"
+                className="p-1 border"
+              />
+              <input
+                name="technologies"
+                value={pro.technologies}
+                onChange={(e) => handleProjectChange(index, e)}
+                placeholder="technologies"
+                className="p-1 border"
+              />
+              <textarea
+                name="discription"
+                value={pro.discription}
+                onChange={(e) => handleProjectChange(index, e)}
+                placeholder="discription"
+                className="col-span-2 p-1 border"
+              />
+            </div>
+            <button
+              onClick={() => removeProject(index)}
+              className="text-red-500 text-sm mt-2"
+            >
+              ❌ Remove
+            </button>
+          </div>
+        ))}
+
+        <button
+          onClick={() => addProject(index)}
+          className="bg-green-500 text-white px-3 py-1"
+        >
+          + Add Project
         </button>
 
         {/* EDUCATION */}
@@ -338,6 +409,37 @@ function Resume() {
                   </div>
                   <ul className="list-disc ml-5 text-sm text-gray-700 mt-1 space-y-1">
                     {exp.responsibility
+                      .split("\n")
+                      .filter((line) => line.trim())
+                      .map((line, idx) => (
+                        <li key={idx} className="text-black ml-2">
+                          {line}
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* PROJECTS  */}
+          <section className="mt-6">
+            <h2 className="text-purple-700 text-lg font-bold border-b-2 border-black pb-2">
+              PROJECT
+            </h2>
+
+            {/* project   */}
+            <div className="mt-3">
+              {data.projects.map((pro, i) => (
+                <div key={i}>
+                  <div className="flex justify-between font-semibold">
+                    <p>
+                      {pro.projectName || "Project Name"} ,{" "}
+                      {`(${pro.technologies})` || "Technologies"}
+                    </p>
+                  </div>
+                  <ul className="list-disc ml-5 text-sm text-gray-700 mt-1 space-y-1">
+                    {pro.discription
                       .split("\n")
                       .filter((line) => line.trim())
                       .map((line, idx) => (
